@@ -1,4 +1,9 @@
-export const SquareCheck = ({className, onClick}) => {
+type SquareCheckProp = {
+  className: string
+  onClick: React.ReactEventHandler
+}
+
+export const SquareCheck = ({className, onClick}: SquareCheckProp) => {
   return (
     <svg
       onClick={onClick}

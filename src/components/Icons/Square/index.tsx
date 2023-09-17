@@ -1,7 +1,12 @@
+type SquareProp = {
+  className: string
+  onClick: React.ReactEventHandler
+}
+
 export const Square = ({
   className,
   onClick
-}) => {
+}: SquareProp) => {
   return (
     <svg
       onClick={onClick}

@@ -1,4 +1,9 @@
-export const XMark = ({ onClick, className }) => {
+type XMarkProp = {
+  onClick: React.ReactEventHandler
+  className: string
+}
+
+export const XMark = ({ onClick, className }: XMarkProp) => {
   return (
     <svg
       onClick={onClick}
