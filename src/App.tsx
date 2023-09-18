@@ -3,6 +3,7 @@ import { TodoList } from "./components/TodoList";
 import { AddTodoButton } from "./components/AddTodoButton";
 import { TodosProviders } from "./providers/TodosProviders";
 import { TodoFilterSelect } from "./components/TodoFilterSelect";
+import { TodoPriority } from "./components/TodoPriority";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
                 <div className="flex justify-between mobile:px-2 w-full container">
                   <AddTodoButton />
                   <TodoFilterSelect />
+                  <TodoPriority />
                 </div>
               </div>
             </main>

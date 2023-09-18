@@ -2,24 +2,37 @@ import { useContext, useEffect } from "react";
 import { Todo, TodosContext } from "src/providers/TodosProviders";
 import { generateRandomHash } from "src/utils/generateRandomHash";
 
+type TodoPriority = "all" | "complete" | "incomplete";
+
 type NewTodo = Omit<Todo, "date" | "id">;
 
 type TodoFilter = "all" | "complete" | "incomplete";
 
-export const useTodos = ({
-  refreshListOnTodoChange,
-}: {
-  refreshListOnTodoChange?: boolean;
-} = {refreshListOnTodoChange: false}) => {
-  const { todos, setTodos, filtredTodos, setFiltredTodos, filter, setFilter } =
-    useContext(TodosContext);
+export const useTodos = (
+  {
+    refreshListOnTodoChange,
+  }: {
+    refreshListOnTodoChange?: boolean;
+  } = { refreshListOnTodoChange: false }
+) => {
+  const {
+    todos,
+    setTodos,
+    filtredTodos,
+    setFiltredTodos,
+    filter,
+    setFilter,
+    priority,
+    setPriority,
+  } = useContext(TodosContext);
 
   useEffect(() => {
     if (refreshListOnTodoChange) {
-      filterTodos(filter)
+      filterTodos(filter);
+      priorityTodos(priority);
     }
     localStorage.setItem("todos", JSON.stringify(todos));
-  }, [todos])
+  }, [todos]);
 
   const filterTodos = (todoFilter: TodoFilter) => {
     setFilter(todoFilter);
@@ -31,6 +44,25 @@ export const useTodos = ({
     const filtred = todos.filter((todo) => todo.status === todoFilter);
 
     return setFiltredTodos(filtred);
+  };
+
+  const priorityTodos = (TodoPriority: TodoPriority) => {
+    setPriority(TodoPriority);
+
+    const filteredTodos = [...todos].sort((a, b) => {
+      if (TodoPriority === "complete") {
+        if (a.status === "incomplete" && b.status === "complete") return 1
+        if (a.status === "complete" && b.status === "incomplete") return -1
+      }
+      if (TodoPriority === "incomplete") {
+        if (a.status === "complete" && b.status === "incomplete") return 1
+        if (a.status === "incomplete" && b.status === "complete") return -1
+      }
+      
+      return a.date - b.date
+    });
+
+    setFiltredTodos(filteredTodos);
   };
 
   const addTodo = (newTodoData: NewTodo) => {
@@ -85,6 +117,7 @@ export const useTodos = ({
 
   return {
     todos,
+    priorityTodos,
     filtredTodos,
     setFilter,
     filterTodos,

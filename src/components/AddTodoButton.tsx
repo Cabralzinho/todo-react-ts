@@ -6,6 +6,7 @@ import { useTodos } from "@/hooks/useTodos";
 
 export const AddTodoButton = () => {
   const [windowIsOpen, setWindowIsOpen] = useState(false);
+  const [titleValidation, setTitleValidation] = useState(true);
   const [title, setTitle] = useState("");
   const [status, setStatus] = useState<Todo["status"]>("incomplete");
 
@@ -14,9 +15,10 @@ export const AddTodoButton = () => {
   const handleKeyPress = (e: any) => {
     if (windowIsOpen && "Enter" === e.key) {
       addTodo({ title, status });
+      resetInputs();
       setWindowIsOpen(false);
     }
-  }
+  };
 
   useEffect(() => {
     window.addEventListener("keypress", handleKeyPress);
@@ -29,6 +31,7 @@ export const AddTodoButton = () => {
   const resetInputs = () => {
     setTitle("");
     setStatus("incomplete");
+    setTitleValidation(true);
   };
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -67,8 +70,12 @@ export const AddTodoButton = () => {
                   <input
                     className="rounded h-10 px-2 uppercase dark:text-slate-950"
                     type="text"
+                    id="title"
                     placeholder="Write your title here"
-                    onChange={(e) => setTitle(e.target.value)}
+                    onChange={(e) => {
+                      setTitle(e.target.value);
+                      setTitleValidation(false);
+                    }}
                     value={title}
                   />
                 </label>
@@ -91,17 +98,32 @@ export const AddTodoButton = () => {
                   </select>
                 </label>
                 <div className="flex gap-4 flex-col">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      addTodo({ title, status });
-                      setWindowIsOpen(false);
-                      resetInputs();
-                    }}
-                    className="bg-blue-300 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 dark:text-white shadow-sm shadow-slate-950 p-2 rounded-md font-bold w-full"
-                  >
-                    Add Task
-                  </button>
+                  {titleValidation ? (
+                    <button
+                      type="button"
+                      disabled
+                      onClick={() => {
+                        addTodo({ title, status });
+                        setWindowIsOpen(false);
+                        resetInputs();
+                      }}
+                      className="bg-red-300/50 dark:bg-red-700/50 hover:bg-red-500/50 dark:hover:bg-red-600/50 dark:text-white shadow-sm shadow-slate-950 p-2 rounded-md font-bold w-full cursor-pointer"
+                    >
+                      need a title
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        addTodo({ title, status });
+                        setWindowIsOpen(false);
+                        resetInputs();
+                      }}
+                      className="bg-blue-300 dark:bg-blue-700 hover:bg-blue-500 dark:hover:bg-blue-600 dark:text-white shadow-sm shadow-slate-950 p-2 rounded-md font-bold w-full"
+                    >
+                      Add Task
+                    </button>
+                  )}
                   <button
                     onClick={() => setWindowIsOpen(false)}
                     className="dark:text-white p-2 rounded-md font-bold w-full"

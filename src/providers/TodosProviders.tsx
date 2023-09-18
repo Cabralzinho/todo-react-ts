@@ -18,9 +18,13 @@ type TodosContextType = {
   setFiltredTodos: React.Dispatch<React.SetStateAction<Todo[]>>;
   filter: TodoFilter;
   setFilter: React.Dispatch<React.SetStateAction<TodoFilter>>;
+  priority: TodoPriority;
+  setPriority: React.Dispatch<React.SetStateAction<TodoPriority>>;
 }
 
 type TodoFilter = Todo["status"] | "all"
+
+type TodoPriority = Todo["status"] | "all"
 
 export const TodosContext = createContext<TodosContextType>({} as TodosContextType);
 
@@ -38,9 +42,10 @@ export const TodosProviders = ({children}: TodosProvidersProp) => {
   const [todos, setTodos] = useState<Todo[]>(getTodosOnLocalStorage())
   const [filtredTodos, setFiltredTodos] = useState<Todo[]>([]);
   const [filter, setFilter] = useState<TodoFilter>("all");
+  const [priority, setPriority] = useState<TodoPriority>("all")
 
   return (
-      <TodosContext.Provider value={{todos, setTodos, filtredTodos, setFiltredTodos, filter, setFilter}}>
+      <TodosContext.Provider value={{todos, setTodos, filtredTodos, setFiltredTodos, filter, setFilter, priority, setPriority}}>
         {children}
       </TodosContext.Provider>
     )
