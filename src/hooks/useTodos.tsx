@@ -13,7 +13,7 @@ export const useTodos = (
     refreshListOnTodoChange,
   }: {
     refreshListOnTodoChange?: boolean;
-  } = { refreshListOnTodoChange: false }
+  } = { refreshListOnTodoChange: true }
 ) => {
   const {
     todos,
@@ -22,14 +22,12 @@ export const useTodos = (
     setFiltredTodos,
     filter,
     setFilter,
-    priority,
     setPriority,
   } = useContext(TodosContext);
 
   useEffect(() => {
     if (refreshListOnTodoChange) {
       filterTodos(filter);
-      sortTodos(priority);
     }
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
@@ -47,8 +45,6 @@ export const useTodos = (
   };
 
   const sortTodos = (sortOption: sortOption) => {
-    setPriority(sortOption);
-
     let todoListSorted;
 
     const sortTodoByComplete = [...filtredTodos].sort((a, b) => {
@@ -75,20 +71,22 @@ export const useTodos = (
       case "date":
         todoListSorted = sortTodoByDate;
         break;
-  
+
       case "complete":
         todoListSorted = sortTodoByComplete;
         break;
-  
+
       case "incomplete":
         todoListSorted = sortTodoByIncomplete;
         break;
-  
+
       default:
         throw new Error("Opção de ordenamento não existe.");
     }
-  
-    setFiltredTodos(todoListSorted);
+
+    setPriority(sortOption);
+
+    setFiltredTodos(todoListSorted)
   };
 
   const addTodo = (newTodoData: NewTodo) => {
