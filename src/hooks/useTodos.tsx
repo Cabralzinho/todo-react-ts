@@ -49,17 +49,17 @@ export const useTodos = (
   const priorityTodos = (TodoPriority: TodoPriority) => {
     setPriority(TodoPriority);
 
-    const filteredTodos = [...todos].sort((a, b) => {
+    const filteredTodos = [...filtredTodos].sort((a, b) => {
       if (TodoPriority === "complete") {
-        if (a.status === "incomplete" && b.status === "complete") return 1
-        if (a.status === "complete" && b.status === "incomplete") return -1
+        if (a.status === "incomplete" && b.status === "complete") return 1;
+        if (a.status === "complete" && b.status === "incomplete") return -1;
       }
       if (TodoPriority === "incomplete") {
-        if (a.status === "complete" && b.status === "incomplete") return 1
-        if (a.status === "incomplete" && b.status === "complete") return -1
+        if (a.status === "complete" && b.status === "incomplete") return 1;
+        if (a.status === "incomplete" && b.status === "complete") return -1;
       }
-      
-      return a.date - b.date
+
+      return a.date - b.date;
     });
 
     setFiltredTodos(filteredTodos);
@@ -119,7 +119,6 @@ export const useTodos = (
     todos,
     priorityTodos,
     filtredTodos,
-    setFilter,
     filterTodos,
     addTodo,
     removeTodoById,
