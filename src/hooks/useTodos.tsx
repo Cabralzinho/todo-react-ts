@@ -2,7 +2,7 @@ import { useContext, useEffect } from "react";
 import { Todo, TodosContext } from "src/providers/TodosProviders";
 import { generateRandomHash } from "src/utils/generateRandomHash";
 
-type TodoPriority = "all" | "complete" | "incomplete";
+type sortOption = "date" | "complete" | "incomplete";
 
 type NewTodo = Omit<Todo, "date" | "id">;
 
@@ -29,7 +29,7 @@ export const useTodos = (
   useEffect(() => {
     if (refreshListOnTodoChange) {
       filterTodos(filter);
-      priorityTodos(priority);
+      sortTodos(priority);
     }
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
@@ -46,15 +46,22 @@ export const useTodos = (
     return setFiltredTodos(filtred);
   };
 
-  const priorityTodos = (TodoPriority: TodoPriority) => {
-    setPriority(TodoPriority);
+  const sortTodos = (sortOption: sortOption) => {
+    setPriority(sortOption);
 
-    const filteredTodos = [...filtredTodos].sort((a, b) => {
-      if (TodoPriority === "complete") {
+    let todoListSorted;
+
+    const sortTodoByComplete = [...filtredTodos].sort((a, b) => {
+      if (sortOption === "complete") {
         if (a.status === "incomplete" && b.status === "complete") return 1;
         if (a.status === "complete" && b.status === "incomplete") return -1;
       }
-      if (TodoPriority === "incomplete") {
+
+      return a.date - b.date;
+    });
+
+    const sortTodoByIncomplete = [...filtredTodos].sort((a, b) => {
+      if (sortOption === "incomplete") {
         if (a.status === "complete" && b.status === "incomplete") return 1;
         if (a.status === "incomplete" && b.status === "complete") return -1;
       }
@@ -62,7 +69,26 @@ export const useTodos = (
       return a.date - b.date;
     });
 
-    setFiltredTodos(filteredTodos);
+    const sortTodoByDate = [...filtredTodos].sort((a, b) => a.date - b.date);
+
+    switch (sortOption) {
+      case "date":
+        todoListSorted = sortTodoByDate;
+        break;
+  
+      case "complete":
+        todoListSorted = sortTodoByComplete;
+        break;
+  
+      case "incomplete":
+        todoListSorted = sortTodoByIncomplete;
+        break;
+  
+      default:
+        throw new Error("Opção de ordenamento não existe.");
+    }
+  
+    setFiltredTodos(todoListSorted);
   };
 
   const addTodo = (newTodoData: NewTodo) => {
@@ -117,7 +143,7 @@ export const useTodos = (
 
   return {
     todos,
-    priorityTodos,
+    sortTodos,
     filtredTodos,
     filterTodos,
     addTodo,
