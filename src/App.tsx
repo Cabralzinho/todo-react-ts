@@ -14,9 +14,9 @@ function App() {
             <main className="w-full">
               <div className="flex flex-col justify-center items-center gap-16">
                 <h1 className="uppercase dark:text-slate-100">Todo list</h1>
-                <div className="flex  mobile:px-2 w-full items-center container">
+                <div className="flex mobile:flex-col mobile:gap-4 mobile:px-2 w-full items-center container">
                   <AddTodoButton />
-                  <div className="flex justify-end gap-4 mobile:px-2 w-full items-center container">
+                  <div className="flex mobile:flex-col justify-end gap-4 mobile:px-2 w-full items-center container">
                     <TodoFilterSelect />
                     <TodoPriority />
                   </div>
